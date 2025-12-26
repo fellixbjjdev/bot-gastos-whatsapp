@@ -35,3 +35,24 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Servidor rodando na porta ${PORT}`);
 });
+
+app.post("/webhook", (req, res) => {
+  const entry = req.body.entry?.[0];
+  const changes = entry?.changes?.[0];
+  const value = changes?.value;
+  const message = value?.messages?.[0];
+
+  if (!message) {
+    return res.sendStatus(200);
+  }
+
+  const from = message.from;
+  const text = message.text?.body;
+
+  console.log("📩 Mensagem recebida");
+  console.log("De:", from);
+  console.log("Texto:", text);
+
+  res.sendStatus(200);
+});
+
